@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Certificate Verifier | BSc CS Final Year Project</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <i class="ti ti-shield-check"></i>
+      <span>CertVerify</span>
+    </div>
+    <div class="nav-links">
+      <a href="#register" onclick="showTab('register')">Register</a>
+      <a href="#verify" onclick="showTab('verify')">Verify</a>
+      <a href="#database" onclick="showTab('database'); loadDocuments()">Database</a>
+    </div>
+  </nav>
+
+  <!-- ===== HERO SECTION ===== -->
+  <section class="hero">
+    <h1>Document Certificate Verification</h1>
+    <p>Using SHA-256 Cryptographic Hashing</p>
+    <div class="hero-tags">
+      <span><i class="ti ti-lock"></i> Tamper-proof</span>
+      <span><i class="ti ti-cpu"></i> SHA-256</span>
+      <span><i class="ti ti-database"></i> Stored securely</span>
+    </div>
+  </section>
+
+  <!-- ===== TABS ===== -->
+  <div class="container">
+    <div class="tab-bar">
+      <button class="tab-btn active" id="btn-register" onclick="showTab('register')">
+        <i class="ti ti-file-plus"></i> Register Document
+      </button>
+      <button class="tab-btn" id="btn-verify" onclick="showTab('verify')">
+        <i class="ti ti-scan"></i> Verify Document
+      </button>
+      <button class="tab-btn" id="btn-database" onclick="showTab('database'); loadDocuments()">
+        <i class="ti ti-database"></i> All Documents
+      </button>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- TAB 1: REGISTER                       -->
+    <!-- ===================================== -->
+    <div class="tab-content active" id="tab-register">
+      <div class="card">
+        <h2><i class="ti ti-file-plus"></i> Register Original Document</h2>
+        <p class="card-desc">Upload the original document. The system will generate its SHA-256 hash and store it in the database as the "ground truth".</p>
+
+        <form id="registerForm">
+          <!-- Document Details -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Student Name</label>
+              <input type="text" id="studentName" placeholder="e.g. Rahul Sharma" required />
+            </div>
+            <div class="form-group">
+              <label>Course / Degree</label>
+              <input type="text" id="course" placeholder="e.g. BSc Computer Science" required />
+            </div>
+            <div class="form-group">
+              <label>Issuing Authority</label>
+              <input type="text" id="issuer" placeholder="e.g. Mumbai University" required />
+            </div>
+          </div>
+
+          <!-- File Upload Area -->
+          <div class="upload-area" id="reg-upload-area" onclick="document.getElementById('regFile').click()">
+            <i class="ti ti-upload"></i>
+            <p>Click to select document</p>
+            <span>PDF, JPG, PNG, DOCX — Max 10MB</span>
+            <input type="file" id="regFile" hidden accept=".pdf,.jpg,.jpeg,.png,.docx" onchange="onFileSelect(this, 'reg')" />
+          </div>
+
+          <!-- Selected File Preview -->
+          <div class="file-preview hidden" id="reg-preview">
+            <i class="ti ti-file-text"></i>
+            <div class="file-info">
+              <span id="reg-filename">filename.pdf</span>
+              <span id="reg-filesize" class="muted">0 KB</span>
+            </div>
+            <button type="button" class="remove-btn" onclick="removeFile('reg')">
+              <i class="ti ti-x"></i>
+            </button>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="reg-submit-btn">
+            <i class="ti ti-database-plus"></i> Register Document
+          </button>
+        </form>
+
+        <!-- Registration Result -->
+        <div class="result-box hidden" id="reg-result"></div>
+      </div>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- TAB 2: VERIFY                         -->
+    <!-- ===================================== -->
+    <div class="tab-content" id="tab-verify">
+      <div class="card">
+        <h2><i class="ti ti-scan"></i> Verify Document Authenticity</h2>
+        <p class="card-desc">Upload any document (original or suspected copy). The system will compute its hash and compare with the database.</p>
+
+        <form id="verifyForm">
+          <div class="upload-area" id="ver-upload-area" onclick="document.getElementById('verFile').click()">
+            <i class="ti ti-search"></i>
+            <p>Click to select document to verify</p>
+            <span>Upload original or suspected fake document</span>
+            <input type="file" id="verFile" hidden accept=".pdf,.jpg,.jpeg,.png,.docx" onchange="onFileSelect(this, 'ver')" />
+          </div>
+
+          <div class="file-preview hidden" id="ver-preview">
+            <i class="ti ti-file-text"></i>
+            <div class="file-info">
+              <span id="ver-filename">filename.pdf</span>
+              <span id="ver-filesize" class="muted">0 KB</span>
+            </div>
+            <button type="button" class="remove-btn" onclick="removeFile('ver')">
+              <i class="ti ti-x"></i>
+            </button>
+          </div>
+
+          <button type="submit" class="btn btn-blue" id="ver-submit-btn">
+            <i class="ti ti-shield-search"></i> Verify Now
+          </button>
+        </form>
+
+        <!-- Verification Result -->
+        <div class="result-box hidden" id="ver-result"></div>
+      </div>
+    </div>
+
+    <!-- ===================================== -->
+    <!-- TAB 3: DATABASE                       -->
+    <!-- ===================================== -->
+    <div class="tab-content" id="tab-database">
+      <div class="card">
+        <div class="db-header">
+          <h2><i class="ti ti-database"></i> Registered Documents</h2>
+          <button class="btn btn-outline" onclick="loadDocuments()">
+            <i class="ti ti-refresh"></i> Refresh
+          </button>
+        </div>
+        <p class="card-desc">All registered documents with their SHA-256 hashes stored in the database.</p>
+        <div id="db-content">
+          <div class="loading">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+
+  <!-- ===== HOW IT WORKS SECTION ===== -->
+  <section class="how-section">
+    <div class="container">
+      <h2>How SHA-256 Verification Works</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <i class="ti ti-upload"></i>
+          <h3>Upload Original</h3>
+          <p>University/admin uploads the original certificate document</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <i class="ti ti-cpu"></i>
+          <h3>Hash Generated</h3>
+          <p>SHA-256 algorithm creates a unique 256-bit fingerprint of the file</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <i class="ti ti-database"></i>
+          <h3>Stored in DB</h3>
+          <p>Only the hash is saved — not the file. Privacy preserved.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <i class="ti ti-scan"></i>
+          <h3>Verify Anytime</h3>
+          <p>Upload any copy — system compares hash instantly</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">5</div>
+          <i class="ti ti-check"></i>
+          <h3>Real or Fake</h3>
+          <p>Match = Authentic ✅ | No match = Tampered/Fake ❌</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>BSc Computer Science — Final Year Project | Document Certificate Verification using Hash</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
