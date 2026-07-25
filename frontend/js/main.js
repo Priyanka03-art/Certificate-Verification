@@ -3,7 +3,7 @@
 // Certificate Verification System
 // ============================================
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'http://certificate-verification-production.up.railway.app/api';
 
 // ---- Helper: Format file size ----
 function formatSize(bytes) {
