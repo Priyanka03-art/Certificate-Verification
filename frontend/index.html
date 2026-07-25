@@ -3,39 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Certificate Verifier | BSc CS Final Year Project</title>
+  <title>Vaultify — Document Integrity Platform</title>
   <link rel="stylesheet" href="css/style.css" />
-  <!-- Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <!-- ===== NAVBAR ===== -->
   <nav class="navbar">
     <div class="nav-brand">
-      <i class="ti ti-shield-check"></i>
-      <span>CertVerify</span>
+      <div class="nav-brand-icon">
+        <i class="ti ti-shield-check"></i>
+      </div>
+      <span class="nav-brand-text">Vaultify</span>
     </div>
     <div class="nav-links">
-      <a href="#register" onclick="showTab('register')">Register</a>
-      <a href="#verify" onclick="showTab('verify')">Verify</a>
-      <a href="#database" onclick="showTab('database'); loadDocuments()">Database</a>
+      <a href="#" onclick="showTab('register')">Register</a>
+      <a href="#" onclick="showTab('verify')">Verify</a>
+      <a href="#" onclick="showTab('database'); loadDocuments()">Database</a>
+    </div>
+    <div class="nav-cta">
+      <span class="nav-badge"><i class="ti ti-lock"></i> SHA-256 Secured</span>
     </div>
   </nav>
 
-  <!-- ===== HERO SECTION ===== -->
+  <!-- ===== HERO ===== -->
   <section class="hero">
-    <h1>Document Certificate Verification</h1>
-    <p>Using SHA-256 Cryptographic Hashing</p>
-    <div class="hero-tags">
-      <span><i class="ti ti-lock"></i> Tamper-proof</span>
-      <span><i class="ti ti-cpu"></i> SHA-256</span>
-      <span><i class="ti ti-database"></i> Stored securely</span>
+    <div class="hero-inner">
+      <div class="eyebrow"><i class="ti ti-sparkles"></i> Cryptographic Document Integrity</div>
+      <h1>Trust Every<br>Document You Receive</h1>
+      <p>Vaultify uses SHA-256 fingerprinting to detect tampered, forged, or fraudulent documents — instantly and with mathematical certainty.</p>
+      <div class="hero-tags">
+        <span class="tag"><i class="ti ti-lock"></i> Tamper-proof</span>
+        <span class="tag"><i class="ti ti-cpu"></i> SHA-256 Cryptography</span>
+        <span class="tag"><i class="ti ti-database"></i> Secure Storage</span>
+        <span class="tag"><i class="ti ti-bolt"></i> Instant Results</span>
+      </div>
+    </div>
+    <div class="hero-stat-row">
+      <div class="hero-stat">
+        <span class="stat-num">256<span class="stat-unit">-bit</span></span>
+        <span class="stat-label">Hash Strength</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="stat-num">&lt;1<span class="stat-unit">s</span></span>
+        <span class="stat-label">Verification Time</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="stat-num">0</span>
+        <span class="stat-label">Files Stored</span>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <span class="stat-num">100<span class="stat-unit">%</span></span>
+        <span class="stat-label">Accuracy</span>
+      </div>
     </div>
   </section>
 
-  <!-- ===== TABS ===== -->
+  <div class="gold-divider"></div>
+
+  <!-- ===== MAIN APP ===== -->
   <div class="container">
+
     <div class="tab-bar">
       <button class="tab-btn active" id="btn-register" onclick="showTab('register')">
         <i class="ti ti-file-plus"></i> Register Document
@@ -48,40 +81,35 @@
       </button>
     </div>
 
-    <!-- ===================================== -->
-    <!-- TAB 1: REGISTER                       -->
-    <!-- ===================================== -->
+    <!-- TAB 1: REGISTER -->
     <div class="tab-content active" id="tab-register">
       <div class="card">
-        <h2><i class="ti ti-file-plus"></i> Register Original Document</h2>
-        <p class="card-desc">Upload the original document. The system will generate its SHA-256 hash and store it in the database as the "ground truth".</p>
+        <h2><i class="ti ti-file-plus"></i> Register a Document</h2>
+        <p class="card-desc">Upload an original document to register its cryptographic fingerprint. Only the hash is stored — the file never leaves your device.</p>
 
         <form id="registerForm">
-          <!-- Document Details -->
           <div class="form-grid">
             <div class="form-group">
-              <label>Student Name</label>
+              <label>Full Name</label>
               <input type="text" id="studentName" placeholder="e.g. Rahul Sharma" required />
             </div>
             <div class="form-group">
-              <label>Course / Degree</label>
+              <label>Credential / Course</label>
               <input type="text" id="course" placeholder="e.g. BSc Computer Science" required />
             </div>
             <div class="form-group">
-              <label>Issuing Authority</label>
+              <label>Issuing Organisation</label>
               <input type="text" id="issuer" placeholder="e.g. Mumbai University" required />
             </div>
           </div>
 
-          <!-- File Upload Area -->
           <div class="upload-area" id="reg-upload-area" onclick="document.getElementById('regFile').click()">
-            <i class="ti ti-upload"></i>
-            <p>Click to select document</p>
-            <span>PDF, JPG, PNG, DOCX — Max 10MB</span>
+            <i class="ti ti-cloud-upload"></i>
+            <p>Drop your document here</p>
+            <span>PDF, JPG, PNG, DOCX — up to 10 MB</span>
             <input type="file" id="regFile" hidden accept=".pdf,.jpg,.jpeg,.png,.docx" onchange="onFileSelect(this, 'reg')" />
           </div>
 
-          <!-- Selected File Preview -->
           <div class="file-preview hidden" id="reg-preview">
             <i class="ti ti-file-text"></i>
             <div class="file-info">
@@ -94,28 +122,25 @@
           </div>
 
           <button type="submit" class="btn btn-primary" id="reg-submit-btn">
-            <i class="ti ti-database-plus"></i> Register Document
+            <i class="ti ti-database-plus"></i> Register & Generate Hash
           </button>
         </form>
 
-        <!-- Registration Result -->
         <div class="result-box hidden" id="reg-result"></div>
       </div>
     </div>
 
-    <!-- ===================================== -->
-    <!-- TAB 2: VERIFY                         -->
-    <!-- ===================================== -->
+    <!-- TAB 2: VERIFY -->
     <div class="tab-content" id="tab-verify">
       <div class="card">
         <h2><i class="ti ti-scan"></i> Verify Document Authenticity</h2>
-        <p class="card-desc">Upload any document (original or suspected copy). The system will compute its hash and compare with the database.</p>
+        <p class="card-desc">Upload any document — original or suspected copy. Vaultify computes its SHA-256 hash and cross-references it with the registry in milliseconds.</p>
 
         <form id="verifyForm">
           <div class="upload-area" id="ver-upload-area" onclick="document.getElementById('verFile').click()">
-            <i class="ti ti-search"></i>
-            <p>Click to select document to verify</p>
-            <span>Upload original or suspected fake document</span>
+            <i class="ti ti-shield-search"></i>
+            <p>Drop the document to verify</p>
+            <span>Upload the original or any suspected copy</span>
             <input type="file" id="verFile" hidden accept=".pdf,.jpg,.jpeg,.png,.docx" onchange="onFileSelect(this, 'ver')" />
           </div>
 
@@ -130,77 +155,84 @@
             </button>
           </div>
 
-          <button type="submit" class="btn btn-blue" id="ver-submit-btn">
-            <i class="ti ti-shield-search"></i> Verify Now
+          <button type="submit" class="btn btn-primary" id="ver-submit-btn">
+            <i class="ti ti-shield-search"></i> Run Verification
           </button>
         </form>
 
-        <!-- Verification Result -->
         <div class="result-box hidden" id="ver-result"></div>
       </div>
     </div>
 
-    <!-- ===================================== -->
-    <!-- TAB 3: DATABASE                       -->
-    <!-- ===================================== -->
+    <!-- TAB 3: DATABASE -->
     <div class="tab-content" id="tab-database">
       <div class="card">
         <div class="db-header">
-          <h2><i class="ti ti-database"></i> Registered Documents</h2>
+          <h2><i class="ti ti-database"></i> Document Registry</h2>
           <button class="btn btn-outline" onclick="loadDocuments()">
             <i class="ti ti-refresh"></i> Refresh
           </button>
         </div>
-        <p class="card-desc">All registered documents with their SHA-256 hashes stored in the database.</p>
+        <p class="card-desc">All registered documents with their SHA-256 fingerprints. No files are stored — only cryptographic hashes.</p>
         <div id="db-content">
-          <div class="loading">Loading...</div>
+          <div class="loading"><i class="ti ti-loader-2"></i> Loading registry...</div>
         </div>
       </div>
     </div>
 
-  </div><!-- /container -->
+  </div>
 
-  <!-- ===== HOW IT WORKS SECTION ===== -->
+  <!-- ===== HOW IT WORKS ===== -->
   <section class="how-section">
-    <div class="container">
-      <h2>How SHA-256 Verification Works</h2>
+    <div class="how-section-inner">
+      <div class="section-label">Under the hood</div>
+      <h2>How Vaultify Works</h2>
+      <p class="how-section-sub">Mathematical certainty in five steps — no human judgment required.</p>
       <div class="steps-grid">
         <div class="step-card">
-          <div class="step-num">1</div>
-          <i class="ti ti-upload"></i>
+          <div class="step-num">01</div>
+          <i class="ti ti-cloud-upload"></i>
           <h3>Upload Original</h3>
-          <p>University/admin uploads the original certificate document</p>
+          <p>The issuing authority uploads the authentic document to register it.</p>
         </div>
         <div class="step-card">
-          <div class="step-num">2</div>
+          <div class="step-num">02</div>
           <i class="ti ti-cpu"></i>
           <h3>Hash Generated</h3>
-          <p>SHA-256 algorithm creates a unique 256-bit fingerprint of the file</p>
+          <p>SHA-256 produces a unique 256-bit fingerprint from the file's binary content.</p>
         </div>
         <div class="step-card">
-          <div class="step-num">3</div>
+          <div class="step-num">03</div>
           <i class="ti ti-database"></i>
-          <h3>Stored in DB</h3>
-          <p>Only the hash is saved — not the file. Privacy preserved.</p>
+          <h3>Hash Stored</h3>
+          <p>Only the fingerprint is saved. The original file never touches our servers.</p>
         </div>
         <div class="step-card">
-          <div class="step-num">4</div>
+          <div class="step-num">04</div>
           <i class="ti ti-scan"></i>
           <h3>Verify Anytime</h3>
-          <p>Upload any copy — system compares hash instantly</p>
+          <p>Anyone can upload a copy. Vaultify recomputes and compares the hash instantly.</p>
         </div>
         <div class="step-card">
-          <div class="step-num">5</div>
-          <i class="ti ti-check"></i>
-          <h3>Real or Fake</h3>
-          <p>Match = Authentic ✅ | No match = Tampered/Fake ❌</p>
+          <div class="step-num">05</div>
+          <i class="ti ti-shield-check"></i>
+          <h3>Instant Verdict</h3>
+          <p>Hash match means authentic. Any mismatch — even one byte — flags the document.</p>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ===== FOOTER ===== -->
   <footer>
-    <p>BSc Computer Science — Final Year Project | Document Certificate Verification using Hash</p>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <i class="ti ti-shield-check"></i>
+        <span>Vaultify</span>
+      </div>
+      <p class="footer-copy">Cryptographic document integrity for organisations that can't afford to trust the wrong paper.</p>
+      <p class="footer-legal">© 2025 Vaultify. SHA-256 hashing. Zero file storage.</p>
+    </div>
   </footer>
 
   <script src="js/main.js"></script>
